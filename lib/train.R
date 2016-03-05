@@ -17,21 +17,28 @@ train <- function(dat_train, label_train, par=NULL){
   ### Output: training model specification
   
   ### load libraries
-  library("gbm")
+  #library("gbm")
   
+        library(e1071)
+        
+        svm_fit <- svm(label_train~dat_train,kernel = "linear",data = dat_train,gamma=0,cost = 0.00101,scale=T) 
+        
+        
+        
+        
   ### Train with gradient boosting model
-  if(is.null(par)){
-    depth <- 3
-  } else {
-    depth <- par$depth
-  }
-  fit_gbm <- gbm.fit(x=dat_train, y=label_train,
-                     n.trees=2000,
-                     distribution="bernoulli",
-                     interaction.depth=depth, 
-                     bag.fraction = 0.5,
-                     verbose=FALSE)
-  best_iter <- gbm.perf(fit_gbm, method="OOB")
+  #if(is.null(par)){
+  #  depth <- 3
+  #} else {
+  #  depth <- par$depth
+  #}
+  #fit_gbm <- gbm.fit(x=dat_train, y=label_train,
+  #                   n.trees=2000,
+  #                   distribution="bernoulli",
+  #                   interaction.depth=depth, 
+  #                   bag.fraction = 0.5,
+  #                   verbose=FALSE)
+  #best_iter <- gbm.perf(fit_gbm, method="OOB")
 
   return(list(fit=fit_gbm, iter=best_iter))
 }

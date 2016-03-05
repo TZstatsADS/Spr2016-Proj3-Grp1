@@ -37,8 +37,10 @@ feature <- function(img_dir, feature_method ,data_name=NULL){
 
     v<-color_hist(img,feature_method[2],feature_method[3],feature_method[4])
     
-  
-    print(i)
+        if (i%%100 == 0){
+                print(i)
+        }
+
     dat[i,] <- v
   }
   
