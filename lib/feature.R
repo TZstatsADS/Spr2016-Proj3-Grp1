@@ -27,21 +27,17 @@ feature <- function(img_dir, feature_method ,data_name=NULL){
   n_files <- length(list.files(img_dir))
   
   ### determine img dimensions
-  img0 <-  readImage(file_names[1])
+  #img0 <-  readImage(file_names[1])
 
   ### store vectorized pixel values of images
   dat <- array(dim=c(n_files,feature_method[2]*feature_method[3]*feature_method[4]))
   for(i in 1:n_files){
-    img <- readImage(file_names[i])
+    img <- readImage(paste0(img_dir,file_names[i]))
     img <-resize(img,256,256)
-    if(feature_method[1] == 1){
-           
-          v<-color_hist(img,feature_method[2],feature_method[3],feature_method[4])
-    }else if(feature_method[1] == 2) {
-            
-    }else{
-            
-    }
+
+    v<-color_hist(img,feature_method[2],feature_method[3],feature_method[4])
+    
+  
     print(i)
     dat[i,] <- v
   }
@@ -61,9 +57,17 @@ color_hist <- function(img,nR,nG,nB){
         rBin <- seq(0, 1, length.out=nR)
         gBin <- seq(0, 1, length.out=nG)
         bBin <- seq(0, 1, length.out=nB)
-        freq_rgb <- as.data.frame(table(factor(findInterval(mat[,,1], rBin), levels=1:nR), 
-                                        factor(findInterval(mat[,,2], gBin), levels=1:nG), 
-                                        factor(findInterval(mat[,,3], bBin), levels=1:nB)))
+        
+        if (length(dim(mat))==3){
+
+                freq_rgb <- as.data.frame(table(factor(findInterval(mat[,,1], rBin), levels=1:nR), 
+                                                factor(findInterval(mat[,,2], gBin), levels=1:nG), 
+                                                factor(findInterval(mat[,,3], bBin), levels=1:nB)))
+        }else {
+                freq_rgb <- as.data.frame(table(factor(findInterval(mat, rBin), levels=1:nR), 
+                                                factor(findInterval(mat, gBin), levels=1:nG), 
+                                                factor(findInterval(mat, bBin), levels=1:nB)))
+        }
         rgb_feature <- as.numeric(freq_rgb$Freq)/(ncol(mat)*nrow(mat)) # normalization
         return (rgb_feature)
 }
