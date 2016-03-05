@@ -6,7 +6,7 @@
 ### Project 3
 ### ADS Spring 2016
 
-feature <- function(img_dir, feature_method ,data_name=NULL){
+feature <- function(img_dir, file_names,feature_method ,data_name=NULL){
   ### Construct process features for training/testing images
   ### Sample simple feature: Extract raw pixel values os features
   
@@ -23,25 +23,33 @@ feature <- function(img_dir, feature_method ,data_name=NULL){
   #img_dir <- "../data/zipcode_train/"
   #img_name <- "img_zip_train"
 ######################
-  file_names <- list.files(img_dir)
-  n_files <- length(list.files(img_dir))
+  
+  n_files <- length(file_names)
   
   ### determine img dimensions
   #img0 <-  readImage(file_names[1])
 
   ### store vectorized pixel values of images
-  dat <- array(dim=c(n_files,feature_method[2]*feature_method[3]*feature_method[4]))
+  dat <- array(dim=c(n_files,feature_method[1]*feature_method[2]*feature_method[3]))
   for(i in 1:n_files){
-    img <- readImage(paste0(img_dir,file_names[i]))
-    img <-resize(img,256,256)
+          
+          
+          if (sum(grep(".jpg",file_names[i]))==0){
+                  dat[i,] <- NA
+                  next
+          }
+          
+          
+        img <- readImage(paste0(img_dir,file_names[i]))
+        img <-resize(img,256,256)
 
-    v<-color_hist(img,feature_method[2],feature_method[3],feature_method[4])
-    
+        v<-color_hist(img,feature_method[1],feature_method[2],feature_method[3])
+        print(i)
         if (i%%100 == 0){
                 print(i)
         }
 
-    dat[i,] <- v
+        dat[i,] <- v
   }
   
   ### output constructed features
