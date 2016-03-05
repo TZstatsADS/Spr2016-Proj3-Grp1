@@ -33,6 +33,7 @@ feature <- function(img_dir, feature_method ,data_name=NULL){
   dat <- array(dim=c(n_files,feature_method[2]*feature_method[3]*feature_method[4]))
   for(i in 1:n_files){
     img <- readImage(file_names[i])
+    img <-resize(img,256,256)
     if(feature_method[1] == 1){
            
           v<-color_hist(img,feature_method[2],feature_method[3],feature_method[4])
