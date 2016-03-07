@@ -44,7 +44,7 @@ feature <- function(img_dir, file_names,feature_method ,data_name=NULL){
         img <-resize(img,256,256)
 
         v<-color_hist(img,feature_method[1],feature_method[2],feature_method[3])
-        print(i)
+        #print(i)
         if (i%%100 == 0){
                 print(i)
         }

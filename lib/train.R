@@ -7,7 +7,7 @@
 ### ADS Spring 2016
 
 
-train <- function(dat_train, label_train, par=NULL){
+train <- function(train_X, labels, par=NULL){
   
   ### Train a Gradient Boosting Model (GBM) using processed features from training images
   
@@ -20,11 +20,9 @@ train <- function(dat_train, label_train, par=NULL){
   #library("gbm")
   
         library(e1071)
-        
-        svm_fit <- svm(label_train~dat_train,kernel = "linear",data = dat_train,gamma=0,cost = 0.00101,scale=T) 
-        
-        
-        
+        names(labels) <- c("labels")
+        traindata = cbind(labels,train_X)
+        svm_fit <- svm(labels~.,kernel = "linear",data = traindata,gamma=0,cost = 10^-4,scale=T,type="C") 
         
   ### Train with gradient boosting model
   #if(is.null(par)){
@@ -40,5 +38,5 @@ train <- function(dat_train, label_train, par=NULL){
   #                   verbose=FALSE)
   #best_iter <- gbm.perf(fit_gbm, method="OOB")
 
-  return(list(fit=fit_gbm, iter=best_iter))
+  return(list(fit=svm_fit))
 }
