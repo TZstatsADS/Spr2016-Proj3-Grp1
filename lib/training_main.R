@@ -1,26 +1,30 @@
 source("train.R")
 source("feature.R")
-labels <- read.table("../data/zip_train_label.txt")
-dir_train <- "../data/zipcode_train/"
-file_names <- list.files(dir_train)
+features <- read.table("../data/feature50.txt")
+labels <- read.csv("../data/label.csv") 
+labels_selected <- labels[match(features[,1],labels[,1]),]
+        
+n<-dim(features)[1]
 
-n_files <- length(file_names)
+dog_index <- labels_selected[,2]==0
+dog_labels <- labels_selected[dog_index,]
+dog_features <- features[dog_index,]
 
-dat <- array(dim=c(n_files, 256)) 
-for(i in 1:n_files){
-        img <- readImage(paste0(dir_train, file_names[i]))
-        dat[i,] <- as.vector(img)
-}
+cat_features <- features[!dog_index,]
+cat_labels <- labels_selected[!dog_index,]
 
-index<-sample(1:1289,1289)
-train_X <- dat[index[1:1000],]
-test_X <- dat[index[1001:1289],]
+index<-sample(1:n,n,replace = FALSE)
+train_X <- rbind(cat_features[1:2000,-1],dog_features[1:2000,-1])
+test_X <- rbind(cat_features[2001:2394,-1],dog_features[2001:2394,-1])
 
-y <- tune(svm, labels~., data = remainDataSet, 
-          ranges = list(gamma = 10^(-5),cost = seq(0.01, 1, 0.05),kernel = "radial")
-)
+train_labels <- rbind(cat_labels[1:2000,],dog_labels[1:2000,])
+test_labels <-rbind(cat_labels[2001:2394,],dog_labels[2001:2394,])
 
-fit_svm<- train(train_X,labels[index[1:1000],])
+index <- !is.na(train_labels[,2])
+
+fit_svm<- train(train_X[index,],train_labels[index,2])
 
 x_hat <- predict(fit_svm[[1]], test_X)
 
+table(x_hat,test_labels[,2])
+sum(diag(table(x_hat,test_labels[,2])))/length(x_hat)

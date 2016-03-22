@@ -18,12 +18,10 @@ train <- function(train_X, labels, par=NULL){
   
   ### load libraries
   #library("gbm")
-  
         library(e1071)
         names(labels) <- c("labels")
         traindata = cbind(labels,train_X)
-        svm_fit <- svm(labels~.,kernel = "linear",data = traindata,gamma=0,cost = 10^-4,scale=T,type="C") 
-        
+        svm_fit <- svm(labels~.,kernel = "linear",data = traindata,gamma=0,cost = 10 ,scale=T,type="C") 
   ### Train with gradient boosting model
   #if(is.null(par)){
   #  depth <- 3
