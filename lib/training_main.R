@@ -1,6 +1,6 @@
 source("train.R")
 source("feature.R")
-features <- read.table("../data/feature50.txt")
+features <- read.table("../data/feature5000.txt")
 labels <- read.csv("../data/label.csv") 
 labels_selected <- labels[match(features[,1],labels[,1]),]
         
@@ -24,7 +24,9 @@ index <- !is.na(train_labels[,2])
 
 fit_svm<- train(train_X[index,],train_labels[index,2])
 
-x_hat <- predict(fit_svm[[1]], test_X)
+index <- !is.na(test_X[,2])
 
-table(x_hat,test_labels[,2])
-sum(diag(table(x_hat,test_labels[,2])))/length(x_hat)
+x_hat <- predict(fit_svm[[1]], test_X[index,])
+
+table(x_hat,test_labels[index,2])
+sum(diag(table(x_hat,test_labels[index,2])))/length(x_hat)
