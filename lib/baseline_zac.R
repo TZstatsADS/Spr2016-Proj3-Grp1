@@ -1,7 +1,7 @@
 setwd("~/Documents/stat4249/cycle3cvd-team1/lib")
 source("train.R")
 source("feature.R")
-setwd("~/Desktop/cycle3cvd-team1/lib")
+setwd("~/Documents/stat4249/project3/images")
 names <- list.files()
 set.seed(1)
 
