@@ -1,6 +1,6 @@
 # Project CatsDogs: Predictive analytics-model evaluation and selection
 
-Ziyue Wu, Qiner Shi, Yanran Wang, Mengying Liu
+Ziyue Wu, Qiner Shi, Yanran Wang, Mengying Liu,
 
 #### - for cats versus dogs image data
 
